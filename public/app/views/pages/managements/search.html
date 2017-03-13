@@ -1,0 +1,89 @@
+<!-- Heading -->
+<div class="page-header">
+    <h1>Search Engine</h1>
+</div>
+<!-- Heading -->
+<br>
+<!-- Loading -->
+<div class="jumbotron text-center" ng-show="management.loading">
+    <span class="glyphicon glyphicon-repeat spinner"></span>
+    <p>Loading....</p>
+</div>
+<!-- Loading -->
+<br>
+<!--Filters-->
+<div class="navbar-form">
+    <div class="form-group">
+        <input type="text" class="form-control" name="searchByUsername" placeholder="search by..." ng-model="searchByUsername">
+    </div>
+    <button type="button" class="btn btn-default">Username</button>
+</div>
+<div class="navbar-form">
+    <div class="form-group">
+        <input type="text" class="form-control" name="searchByEmail" placeholder="search by..." ng-model="searchByEmail">
+    </div>
+    <button type="button" class="btn btn-default">Email</button>
+</div>
+<div class="navbar-form">
+    <div class="form-group">
+        <input type="text" class="form-control" name="searchByName" placeholder="search by..." ng-model="searchByName">
+    </div>
+    <button type="button" class="btn btn-default">Name</button>
+</div>
+<div class="navbar-form">
+    <button type="button" ng-click="management.advancedSearch(searchByUsername,searchByEmail,searchByName);" class="btn btn-default">Search</button>
+</div>
+<!--Filters-->
+<br>
+<!--Sort-->
+<div class="btn-group">
+    <button type="button" class="btn btn-danger">Sort by</button>
+    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu">
+        <li><a href="#" ng-click="management.sortOrder('username');">Username</a></li>
+        <li><a href="#" ng-click="management.sortOrder('email');">Email</a></li>
+        <li><a href="#" ng-click="management.sortOrder('name');">Name</a></li>
+    </ul>
+</div>
+<!--Sort-->
+<br>
+<!--Results-->
+<div ng-show="management.searchLimit === undefined">
+    <p><strong>Results:</strong>{{(management.users | filter: advancedSearchFilter | limitTo : management.searchLimit).length}}</p>
+</div>
+
+<div ng-show="management.sort">
+    <p><strong>Showing:</strong>{{management.sort}}</p>
+</div>
+<br>
+<br>
+<!--Results-->
+<!--Table-->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <strong>User Management</strong>
+    </div>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+        </tr>
+        <tr ng-repeat="person in management.users | filter: advancedSearchFilter | limitTo: management.searchLimit | orderBy: management.sort">
+            <td>{{person.name}}</td>
+            <td>{{person.username}}</td>
+            <td>{{person.email}}</td>
+            <td>
+                <a href="/edit/{{person._id}}">
+                    <button type="button" ng-show="management.editAccess" class="btn btn-primary">Edit</button>
+                </a>
+                <button type="button" ng-click="management.deleteUser(person.username)" ng-show="management.deleteAccess" class="btn btn-danger">Delete</button>
+
+            </td>
+        </tr>
+    </table>
+</div>
+<!--Table-->
